@@ -1,19 +1,27 @@
 export default class Components{
-  constructor(components){
+  constructor(components, options){
     this.components = components;
+
+    this._options = {
+      keepAttr: false
+    };
+
+    Object.assign(this._options, options);
+
     this.init();
   }
 
   init(){
     document.querySelectorAll('[data-component]').forEach(element => {
-      let _Component = this.components[element.getAttribute('data-component')];
+      const dataComponent = element.dataset.component;
+      let _Component = this.components[dataComponent];
       if(_Component){
         _Component = new _Component(element);
       } else {
-        throw new Error(`The component "${element.getAttribute('data-component')}" doesn't exists. Make sure it is declared.`);
+        throw new Error(`The component "${dataComponent}" doesn't exists. Make sure it is declared.`);
       }
 
-      if(typeof _Component['open'] === "function") _Component.open();
+      if(typeof _Component['init'] === "function") _Component.init();
     });
   }
 }

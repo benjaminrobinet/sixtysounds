@@ -1,15 +1,19 @@
-{% extends 'base.html.twig' %}
+{% extends (app.request.xmlHttpRequest ? 'base-ajax.html.twig' : 'base.html.twig') %}
 
 {% block body %}
     <div id="soundbox" data-component="soundbox">
-        <div class="sounds" data-component="sound">
+        <div class="sounds">
             {% for i in 0..100 %}
             <div class="sound">
                 <div class="content-wrapper">
                     <div class="background"></div>
                     <div class="key"></div>
                     <div class="description-wrapper">
-                        <div class="description"></div>
+                        <div class="description">
+                            <div data-href="test-data">link</div>
+                            <a href="test">link</a>
+                            <a href="test-a-href" data-href="test-a-data">link</a>
+                        </div>
                     </div>
                 </div>
             </div>
