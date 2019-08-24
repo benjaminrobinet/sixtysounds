@@ -1,7 +1,8 @@
+import $ from 'jquery'
 
 export default class SoundboxComponent{
-  constructor($container){
-    this.$container = $container;
+  constructor(container){
+    console.log($(container));
   }
 
   populate(){
