@@ -9,4 +9,12 @@ export default class SoundboxComponent{
   init(){
     console.log('init');
   }
+
+  attach(){
+    console.log('attach');
+  }
+
+  open(){
+    console.log('open');
+  }
 }

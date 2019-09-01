@@ -1,6 +1,7 @@
 import { createBrowserHistory } from 'history';
 import { EventEmitter } from 'tiny-events';
-import Fetcher from "./Fetcher";
+import Fetcher from './Fetcher';
+import 'whatwg-fetch'
 
 
 class Router extends EventEmitter{
@@ -10,9 +11,19 @@ class Router extends EventEmitter{
     this.elements = [];
     this.history = createBrowserHistory();
     this.fetcher = new Fetcher();
+    this.hard = false;
 
     this.unlisten = this.history.listen((location, action) => {
-      this.emit('change', {location, action})
+      console.log(location);
+      this.fetcher.fetch(location.pathname).then(response => {
+        if(response.ok){
+          this.emit('change', {response});
+        } else {
+          window.location = location.pathname;
+        }
+      }).catch(error => {
+        this.emit('error', {error});
+      });
     });
 
     this.change = this.change.bind(this);
@@ -36,15 +47,20 @@ class Router extends EventEmitter{
    * @param {Event} e
    */
   change(e){
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    if(e.target.dataset.triggered) return;
-    e.target.dataset.triggered = true;
+    if(!this.hard){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if(e.target.dataset.triggered) return;
+      e.target.dataset.triggered = true;
+    }
+
+    this.emit('beforeChange');
 
     let src = e.target.getAttribute('data-href') || e.target.getAttribute('href');
 
     if(src && src.length){
-      console.log(src);
+      this.history.push(src);
+      // console.log(src);
     }
   }
 

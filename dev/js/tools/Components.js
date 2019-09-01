@@ -6,6 +6,8 @@ export default class Components{
       keepAttr: false
     };
 
+    this.currentComponents = [];
+
     Object.assign(this._options, options);
 
     this.init();
@@ -16,12 +18,14 @@ export default class Components{
       const dataComponent = element.dataset.component;
       let _Component = this.components[dataComponent];
       if(_Component){
-        _Component = new _Component(element);
+        this.currentComponents = [...this.currentComponents, new _Component(element)];
       } else {
         throw new Error(`The component "${dataComponent}" doesn't exists. Make sure it is declared.`);
       }
-
-      if(typeof _Component['init'] === "function") _Component.init();
     });
+  }
+
+  getComponents(){
+    return this.currentComponents;
   }
 }
