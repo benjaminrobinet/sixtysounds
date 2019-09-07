@@ -28,12 +28,15 @@ class Bootstrap extends EventEmitter{
     // CLOSE
     // DETACH
 
+    let _callstack = ['init', 'attach'];
 
-    Components.getComponents().forEach(async component => {
-      if(typeof component['init'] === "function") await component.init();
-      if(typeof component['attach'] === "function") await component.attach();
-      if(typeof component['open'] === "function") await component.open();
+    _callstack.forEach((call) => {
+      Components.getComponents().forEach(component => {
+        if(typeof component[call] === "function") component[call]();
+      })
     })
+
+
   }
 
   routeChange({response}){
