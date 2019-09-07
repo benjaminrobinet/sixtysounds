@@ -15,7 +15,11 @@
         },
         {
             "label": "run",
-            "dependsOn": ["watch", "dev server"]
+            "dependsOn": [
+                "watch",
+                "dev server"
+            ],
+            "problemMatcher": []
         }
     ]
 }

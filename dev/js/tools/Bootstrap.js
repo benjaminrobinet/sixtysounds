@@ -20,7 +20,7 @@ class Bootstrap extends EventEmitter{
   }
 
   run(){
-   this.components = new Components(this.componentsModules);
+   Components.setComponents(this.componentsModules)
     // CALL STACK
     // INIT
     // ATTACH
@@ -29,22 +29,11 @@ class Bootstrap extends EventEmitter{
     // DETACH
 
 
-    this.components.getComponents().forEach(component => {
-      if(typeof component['init'] === "function") component.init();
-      if(typeof component['attach'] === "function") component.attach();
-      if(typeof component['open'] === "function") component.open();
+    Components.getComponents().forEach(async component => {
+      if(typeof component['init'] === "function") await component.init();
+      if(typeof component['attach'] === "function") await component.attach();
+      if(typeof component['open'] === "function") await component.open();
     })
-  }
-
-  /**
-   * @param {Object} components
-   */
-  setComponents(components){
-    this.componentsModules = components;
-  }
-
-  getComponents(){
-    return this.componentsModules;
   }
 
   routeChange({response}){
